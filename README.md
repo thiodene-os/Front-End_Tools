@@ -10,6 +10,7 @@ For transparency, changing degraded colors etc...
 MyFONTS:
 http://www.myfonts.com/
 Great Fonts for Building new Logos for web-design
+
 MYFONTS/WHATTHEFONT
 https://www.myfonts.com/WhatTheFont/
 To Know which font has been used from a picture
