@@ -11,3 +11,6 @@ MyFONTS
 http://www.myfonts.com/
 Great Fonts for Building new Logos for web-design
 
+https://www.myfonts.com/WhatTheFont/
+To Know which font has been used from a picture
+
