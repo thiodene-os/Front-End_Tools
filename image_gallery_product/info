@@ -1,3 +1,5 @@
 This section shows how to create a simple image gallery for a product that would be added to a Shopping Cart
 
 HTML, CSS, Javascript, jQuery
+
+Clicking on the small image icons on the bottom of the product image displays it it big on the product cover image.
