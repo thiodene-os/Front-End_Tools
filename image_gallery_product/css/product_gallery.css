@@ -1,0 +1,13 @@
+<style type="text/css">
+  .product_wrap           {display: inline-block; width: 52%;}
+  .form_wrap              {display: inline-block; width: 31%; margin: .7em; 
+                          vertical-align: top; min-height: 30em;}
+  .product_images         {float: left; background: #FFFFFF; border: 1px solid #ddd ;}
+  .product_images         {width:500px; height:%prod_images_height%px;}
+  .product_cover          {width:100%; height:500px;line-height: 500px; text-align:center;}
+  .product_cover img      {display:inline-block ;margin: auto; max-height: 500px; max-width: 500px;vertical-align: middle;}
+  .product_gallery        {float:left;}
+  .product_details        {float: right;}
+  .product_price span     {font-size: 32px;}
+  .img_gallery            {cursor: pointer;display:inline-block;vertical-align: middle;}
+</style>
