@@ -1,0 +1,18 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title><?php echo $page_title; ?></title>
+</head>
+
+<body>
+
+<p>Message:<br>
+<textarea name="comment" cols="40" rows="3" onKeyDown="limitText(this.form.comment,this.form.countdown,255);" 
+onKeyUp="limitText(this.form.comment,this.form.countdown,255);"><?php if (isset($_POST['comment'])) echo $_POST['comment'];?></textarea><br>
+<font size="1">(Maximum characters: 255)<br>
+You have <input readonly type="text" name="countdown" size="3" value="255"> characters left.</font></p>
+
+</body>
+
+</html>
