@@ -1,0 +1,223 @@
+<form name="suggestion_lists" type="Misc">
+<is_submittable>No</is_submittable>
+<params_prog><![CDATA[
+
+  // ******************************************************************************
+  // ********************************** Suggested Qty *****************************
+
+  // Item Suggestion List
+  // Build a table that will display the suggested number of each item to bring to the event
+  $item_sugg = '<div class="sugg_header"><div>Quantities to be taken <img class="show_sugg" src="/~images_folder~/icon_double_down.png"></div></div>' ;
+  $item_sugg .= '<div class="sugg_wrap">' ;
+
+  if ($related_to_po)
+  {
+
+    $item_sugg .= '<div class="card list_wrap">
+                  <div class="sugg_title">' . $po_link . ' <button class="button add_sugg_values" level_id="%level_id%">USE</button></div>
+                  <table class="mb_bound">
+                  <thead><tr>
+                  <th rowspan="2">Item</th><th colspan="2">Quantity</th></tr>
+                    <tr><th><span title="Suggested qty to take">Sugg.</span></th>
+                        <th><span title="Alredy picked qty">Picked</span></th></tr>
+                  </thead>
+                  <tbody>' ;
+
+    // If there was already a purchase order made for this event, we have to take 
+    // exactly the same items to the event. That is why we build a table here so user
+    // knows what exactly needs to be taken and we automatically put the numbers in the
+    // add to cards table       
+
+    $sql_str = "SELECT PURCHASE_ORDER_ITEM.*
+                , PURCHASE_ORDER_ITEM.UID AS PO_ITEM_ID
+                , PRODUCT_LIQUOR.UID AS GN_PROD_ID 
+                , PRODUCT_LIQUOR.AVG_CONSUME_PERSON_WEEK
+                , PRODUCT_GEN.PRODUCT_NAME
+                FROM PURCHASE_ORDER_ITEM 
+                INNER JOIN PRODUCT_GEN ON PRODUCT_GEN.UID = PURCHASE_ORDER_ITEM.LNK_PRODUCT
+                INNER JOIN PRODUCT_LIQUOR ON PRODUCT_LIQUOR.LNK_PRODUCT_GEN = PRODUCT_GEN.UID
+                INNER JOIN PACKAGE_TYPE ON PRODUCT_LIQUOR.LNK_PACKAGE_TYPE = PACKAGE_TYPE.UID
+                WHERE PURCHASE_ORDER_ITEM.LNK_PURCHASE_ORDER = " . $po_id . " ORDER BY PRODUCT_GEN.PRODUCT_NAME" ;
+    $qry = new dbQuery($sql_str,"File: " . __FILE__ . " LINE " . __LINE__) ;
+    $po_item_recs = $qry -> getRecords() ;
+    $rec_count = $qry -> getCount() ;
+    unset($qry) ;
+
+    // Display PO items
+    foreach($po_item_recs as $po_item_rec)
+    {
+      $pack_capac = $po_item_rec['PACKAGE_CAPACITY'] ;
+      if ($pack_capac > 1)
+      {
+        $order_qty = $po_item_rec['ORDER_QTY'] ;
+
+        $full_packs = floatval(ceil($order_qty / $pack_capac)) ;
+        $singles = floatval($order_qty % $pack_capac) ;
+        $quantity = ' (' . $full_packs . ' / ' . $singles . ')' ;
+      }
+      else
+      {
+        $full_packs = 0 ;
+        $singles = floatval($po_item_rec['ORDER_QTY']) ;
+        $quantity = $singles ;
+      }
+
+      $product_link = buildHRef($po_item_rec['PRODUCT_NAME']
+                                    ,"product_liquor_view?gn_prod_id=" 
+                                    . $po_item_rec['GN_PROD_ID'],'','target="_blank"') ;
+
+      // Check if this item already in Cart + qty
+      $sql_str = "SELECT LIQUOR_CHECKOUT_CART.*, LIQUOR_CHECKOUT_CART.UID AS LQCKOUT_CART_ID
+                  FROM LIQUOR_CHECKOUT_CART 
+                  WHERE LIQUOR_CHECKOUT_CART.LNK_LIQUOR_CHECKOUT = " . %liquor_checkout_id% .
+                  " AND LIQUOR_CHECKOUT_CART.LNK_PRODUCT = " . $po_item_rec['GN_PROD_ID'] ;
+      $qry = new dbQuery($sql_str,"File: " . __FILE__ . " LINE " . __LINE__) ;
+      $lqckout_cart_rec = $qry -> getRecord() ;
+      $lqckout_cart_rec_count = $qry -> getCount() ;
+      unset($qry) ;
+
+      if ($lqckout_cart_rec_count > 0)
+      {
+        $item_cart_qty = '<span style="color:green;font-weight:bold;font-size:24px;">' 
+                         . floatval($lqckout_cart_rec['TOTAL_QTY']) . '</span>' ;
+      }
+      else
+      {
+        $item_cart_qty = 0 ;
+      }
+
+      // Pass product_id and suggested qty so later we can use JavaScript to pass this 
+      // to the checkout pane
+      $item_sugg .= '<tr><td class="qty_suggest" gn_prod_id="' . $po_item_rec['GN_PROD_ID'] . '" 
+                        sugg_qty="' . $quantity . '">' . $product_link . '</td><td>'
+                        . $quantity . '</td><td>' . $item_cart_qty . '</td></tr>' ;
+    }
+
+    $item_sugg .= '</tbody></table></div>' ;
+  }
+
+  // If there is not a related PO, then suggest to user how many to take based on the average
+  // consumption and # of guests in the event
+
+  // Select the liquor List at that warehouse
+  $sql_str = "SELECT LIQUOR_LIST_ITEM.*
+              , LIQUOR_LIST_ITEM.UID AS LQ_LIST_ITEM_ID 
+              , LIQUOR_LIST.LQ_LIST_NAME 
+              , PRODUCT_GEN.PRODUCT_NAME
+              FROM LIQUOR_LIST_ITEM
+              INNER JOIN LIQUOR_LIST ON LIQUOR_LIST.UID = LIQUOR_LIST_ITEM.LNK_LIQUOR_LIST
+              INNER JOIN PRODUCT_GEN ON PRODUCT_GEN.UID = LIQUOR_LIST_ITEM.LNK_PRODUCT
+              ORDER BY LNK_LIQUOR_LIST DESC, PRODUCT_GEN.PRODUCT_NAME" ;
+  $qry = new dbQuery($sql_str,"File: " . __FILE__ . " LINE " . __LINE__) ;
+  $lq_list_item_recs = $qry -> getRecords() ;
+  $rec_count = $qry -> getCount() ;
+  unset($qry) ;
+
+  $qry = new dbQuery($sql_str,"File: " . __FILE__ . " LINE " . __LINE__) ;
+  $lq_list_item_recs = $qry -> getRecords() ;
+  $rec_count = $qry -> getCount() ;
+  unset($qry) ;
+
+  $previous_bar_value = FALSE ;
+
+  // Display Items from Liquor Lists Setup
+  foreach($lq_list_item_recs as $lq_list_item_rec)
+  {
+
+    $quantity = floatval($lq_list_item_rec['QTY']) ;
+
+    if ($previous_bar_value != $lq_list_item_rec['LNK_LIQUOR_LIST'])
+    {
+      if ($previous_bar_value)
+        $item_sugg .= '</tbody></table></div>' ;
+
+      $item_sugg .= '<div class="card list_wrap">
+                <div class="sugg_title">' . $lq_list_item_rec['LQ_LIST_NAME'] . ' <button class="button add_sugg_values" level_id="%level_id%">USE</button></div>
+                <table class="mb_bound">
+                <thead><tr>
+                <th rowspan="2">Item</th><th colspan="2">Quantity</th></tr>
+                <tr>
+                  <th class="tooltip" title="Suggested qty to take">Sugg.</th>
+                        <th class="tooltip" title="Alredy picked qty">Picked</th>                    </tr></thead>
+                <tbody>' ;
+      $previous_bar_value = $lq_list_item_rec['LNK_LIQUOR_LIST'] ;
+    }
+
+    $product_link = buildHRef($lq_list_item_rec['PRODUCT_NAME']
+                                  ,"product_liquor_view?gn_prod_id=" 
+                                  . $lq_list_item_rec['LNK_PRODUCT'],'','target="_blank"') ;
+
+    // Check if this item already in Cart + qty
+    $sql_str = "SELECT LIQUOR_CHECKOUT_CART.*, LIQUOR_CHECKOUT_CART.UID AS LQCKOUT_CART_ID 
+                FROM LIQUOR_CHECKOUT_CART 
+                WHERE LIQUOR_CHECKOUT_CART.LNK_LIQUOR_CHECKOUT = " . %liquor_checkout_id% .
+                " AND LIQUOR_CHECKOUT_CART.LNK_PRODUCT = " . $lq_list_item_rec['LNK_PRODUCT'] ;
+    $qry = new dbQuery($sql_str,"File: " . __FILE__ . " LINE " . __LINE__) ;
+    $lqckout_cart_rec = $qry -> getRecord() ;
+    $lqckout_cart_rec_count = $qry -> getCount() ;
+    unset($qry) ;
+
+    if ($lqckout_cart_rec_count > 0)
+    {
+      $item_cart_qty = '<span style="color:green;font-weight:bold;font-size:24px;">' 
+                       . floatval($lqckout_cart_rec['TOTAL_QTY']) . '</span>' ;
+    }
+    else
+    {
+      $item_cart_qty = 0 ;
+    }
+
+
+    // Display the Item row
+    $item_sugg .= '<tr><td class="qty_suggest" gn_prod_id="' . $lq_list_item_rec['LNK_PRODUCT'] . '" 
+                        sugg_qty="' . $quantity . '">' . $product_link . '</td><td>'
+                        . $quantity . '</td><td>' . $item_cart_qty . '</td></tr>' ;
+
+  }
+
+  $item_sugg .= '</tbody></table></div></div>' ;
+
+  $params['item_suggestion_list'] = $item_sugg ;
+
+  // ********************************** End of Suggestions *********************************
+  // ***************************************************************************************
+
+]]></params_prog>
+
+
+<layout><![CDATA[
+
+  <script type="text/javascript">
+    $(function()
+    {
+      // When user clicks on the suggestions it shows a list with respect to chosen warehouse
+      $(".sugg_header").click(function()
+      {
+        // First close all
+        $(".sugg_wrap").slideUp(300) ;
+
+        // If already closed, open it, otherwise close it
+        sugg_wrap = $(this).next(".sugg_wrap") ;
+        if (sugg_wrap.css("display") == "none") 
+        {
+          sugg_wrap.slideDown(300) ;
+          $(".show_sugg").attr("src","/~images_folder~/icon_double_up.png") ;
+        }
+        else
+        {            
+          sugg_wrap.slideUp(300) ;
+          $(".show_sugg").attr("src","/~images_folder~/icon_double_down.png") ;
+        }
+      }) ;
+    }) ; // document.ready
+  </script>
+
+  <style type="text/css">
+    .sugg_wrap                        {display: none; width:100%;}
+    .sugg_header                      {cursor: pointer; margin: .5em 0; width: 100%;}
+    .sugg_header > div                {font-size: 1.8em; color: #99001E;}
+    .sugg_title                       {font-size: 24px;}
+    .list_wrap                        {width: 30%; display: inline-block; vertical-align: top; margin: .3em;}
+  </style>  
+]]></layout>
+</form>  
