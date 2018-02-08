@@ -1,0 +1,407 @@
+<page page_id="pub_product_view">
+  <page_path>/public/pub_product_view.php</page_path>
+  <use_this_layout>public_page_layout</use_this_layout>
+  <params_prog comment="Images"><![CDATA[
+    
+    
+    // ************************************ Attached Documents ************************************
+    $sql_str = "SELECT * FROM ATTACHED_DOC WHERE RELATED_REC_TYPE = " . ATT_DOC_RELATED_REC_PRODUCT_GEN
+                . " AND FILE_TYPE = " . ATTACHED_DOC_FILE_TYPE_OTHER
+                . " AND LNK_RELATED_REC = " . #_GET#['product_id'] ;
+    $qry = new dbQuery($sql_str,"File: " . __FILE__ . " LINE " . __LINE__) ;
+    $att_doc_recs = $qry -> getRecords() ;
+    $att_doc_rec_count = $qry -> getCount() ;
+    unset($qry) ;
+    
+    $att_docs = '' ;
+    if ($att_doc_rec_count > 0)
+    {
+      $att_docs .= '<div class="details_row"><div><label>Documentation:</label></div>' ;
+      foreach($att_doc_recs as $att_doc_rec)
+      {
+        
+        $img_name = $att_doc_rec['DOC_FILE_NAME'] ;
+        if (!isImageFileName($img_name))
+        {
+          $download_href = buildFileDownLoadHRef("<img class=\"download_pdf\" 
+                            src=\"/~images_folder~/icon_pdf_download.png\" />"
+                           ,"attached_doc_doc_file_name",$att_doc_rec['UID'],"Click to Download") ;
+          $att_docs .= '<div>' . $download_href ;
+          $att_docs .= "<span>" . $att_doc_rec['DOC_TITLE'] . "</span></div>" ;
+        }
+      }
+      $att_docs .= '</div>' ;
+    }
+    $params['att_docs'] = $att_docs ;
+    
+    // Also show the button to upload documents only if this is a corporate user
+    $btn_upload_doc = "" ;
+    $img = "<img src=\"/~images_folder~/icon_add.png\" title=\"Click to upload documents\" />" ;
+    $btn_upload_doc = buildHRef($img,"product_document_new?product_id=%product_id%") ;
+    $params['btn_upload_doc'] = $btn_upload_doc ;
+    // *************************** End of Attached Documents ***********************************
+      
+      
+      
+    
+    // Pictures attached to this product for image Cover and Gallery
+    $sql_str = "SELECT ATTACHED_DOC.* FROM ATTACHED_DOC 
+                  WHERE RELATED_REC_TYPE = " . ATT_DOC_RELATED_REC_PRODUCT_GEN
+                    . " AND LNK_RELATED_REC = " . #_GET#['product_id'] ;
+    $qry = new dbQuery($sql_str,"File: " . __FILE__ . " LINE " . __LINE__) ;
+    $att_doc_recs = $qry -> getRecords() ;
+    $att_doc_rec_count = $qry -> getCount() ;
+    unset($qry) ;
+
+    
+    $cover_img = '' ;
+    $other_imgs = '' ;
+    $img_gallery = '' ;
+    $other_docs = '' ;
+    
+    if ($att_doc_rec_count == 0)
+    {
+      $cover_img = '<img src="/images/no_image_available.png">' ;
+      $cover_class = 'product_cover' ;
+      // Cover only
+      $prod_images_height = 500 ;
+      $other_imgs = '' ;
+      $img_gallery = $cover_img ;
+      $other_docs = '' ;
+    }
+    else
+    {
+      // Cover + gallery images
+      if ($att_doc_rec_count == 1)
+        $prod_images_height = 500 ;
+      else
+        $prod_images_height = 600 ;
+      $cover_class = 'sp_wrap' ;
+      
+      // ************************ Gallery of all other images ******************
+      // Now find all other images
+      foreach($att_doc_recs as $att_doc_rec)
+      {
+        $img_name = $att_doc_rec['DOC_FILE_NAME'] ;
+        if (isImageFileName($img_name))
+        {
+        
+          // *************** Create Gallery *******************
+          // For gallery we have to resize and make it small and save into temp folder
+          $img_full_name = $GLOBALS['upload_prefix'] . '/' . attached_docs_folder 
+                              . '/' . $att_doc_rec['DOC_FOLDER'] . '/' . $img_name ;
+          
+          // Convert fild to image resource based on extension
+          $file_ext = getFileExtension($img_name) ;
+          if ($file_ext == "jpg")
+            $img = imagecreatefromjpeg($img_full_name) ; 
+          elseif ($file_ext == "png")
+            $img = imagecreatefrompng($img_full_name) ; 
+          elseif ($file_ext == "gif")
+            $img = imagecreatefromgif($img_full_name) ; 
+          
+          // Resize the image to smaller one and save into temp folder
+          $img = resizeImage($img,500,500) ;
+          $resized_full_name = $GLOBALS['upload_prefix'] . '/' . temp_folder . '/' . $img_name ;
+          imagejpeg($img,$resized_full_name) ;
+          
+          // Now create the img tag and link to the one saved in temp folder
+          // If this is the cover image add sp_default
+          if ($att_doc_rec['LNK_CAT'] == ATTACHED_DOC_CAT_COVER_IMAGE_ID)
+          {
+            $img_gallery .= 
+            '<a href="/~attached_docs_folder~/' . $att_doc_rec['DOC_FOLDER'] 
+                    .  '/' . $img_name . '" class="sp_default"><img src="/~temp_folder~/' . $img_name . '" alt=""></a>' ;
+          }
+          else
+          {
+            $img_gallery .= 
+            '<a href="/~attached_docs_folder~/' . $att_doc_rec['DOC_FOLDER'] 
+                    .  '/' . $img_name . '"><img src="/~temp_folder~/' . $img_name . '" alt=""></a>' ;
+          }
+          
+                    
+        } // Is image
+      } // All attached docs
+    } // rec_count != 0
+
+  
+    $params['cover_class'] = $cover_class ;
+    $params['other_docs'] = $other_docs ;
+    $params['img_gallery'] = $img_gallery ;
+    $params['prod_images_height'] = $prod_images_height ;
+    
+  ]]></params_prog>
+  <params_prog><![CDATA[
+    $product_id = #_GET#['product_id'] ;
+    $product_rec = lookupRecordbyId("PRODUCT_GEN","UID",$product_id
+                                        ,"SKU,PRODUCT_NAME,PROD_DESC,DECIMAL_POINTS,IS_MANUFACTURED,UNIT_OF_MEASURE
+                                         ,PRODUCT_TYPE,REVISION_NUM,SELLING_PRICE,WEIGHT, WEIGHT_UNIT, PROD_STATUS
+                                         ,QTY_AVAILABLE") ;
+    
+    
+    if ($product_rec['SELLING_PRICE'])
+    {
+      $price = number_format ($product_rec['SELLING_PRICE'], 2) ;
+      $params['prod_price'] = '$' . $price ;
+      $params['price_val'] = $price ;
+    }
+    else
+    {
+      $price = 0 ;
+      $params['prod_price'] = '$0.00' ;
+      $params['price_val'] = $price ;
+    }
+    
+    
+    $params['prod_sku'] = $product_rec['SKU'] ;
+    $params['prod_name'] = $product_rec['PRODUCT_NAME'] ;
+    
+    // Add the category description
+    $prod_desc = $product_rec['PROD_DESC'] ;
+    if ($prod_desc)
+      $params['prod_desc'] = '<h3>' . $product_rec['PROD_DESC'] . '</h3>' ;
+    else
+      $params['prod_desc'] = '' ;
+    
+    $params['decimal_points'] = $product_rec['DECIMAL_POINTS'] ;
+    $params['is_manufactured'] = $product_rec['IS_MANUFACTURED'] ; 
+    
+    
+    // Build Product size drop down
+    $sql_str = "SELECT PRODUCT_SIZE.*, PRODUCT_SIZE.UID AS PRODZE_ID 
+                FROM PRODUCT_SIZE" ;
+    $qry = new dbQuery($sql_str,"File: " . __FILE__ . " LINE " . __LINE__) ;
+    $prodze_recs = $qry -> getRecords() ;
+    $rec_count = $qry -> getCount() ;
+    unset($qry) ;
+    
+    $product_size = '<select class="size"><option value="~def_show_on_no_value~">~def_show_on_no_value~</option>' ;
+    foreach($prodze_recs as $prodze_rec)
+    {
+      $product_size .= '<option value=' . $prodze_rec['PRODZE_ID'] . '>L' 
+      . floatval($prodze_rec['LENGTH']) . '/W'. floatval($prodze_rec['WIDTH']) . '</option>' ;
+      
+    }
+    $product_size .= '</select>' ;
+    $params['prod_size'] = $product_size ;
+    
+    // Product Weight
+    if (! empty($product_rec['WEIGHT']) && ! empty($product_rec['WEIGHT_UNIT']))
+    {
+      $weight_unit = $GLOBALS['des_weight_unit_of_measure'][$product_rec['WEIGHT_UNIT']] ;
+      $params['prod_weight'] = floatval($product_rec['WEIGHT']) . ' ' . $weight_unit ;
+    }
+    else
+      $params['prod_weight'] = '---' ;
+    
+    // Shipping details
+    $params['prod_shipping'] = 'Calculated at Checkout' ;
+
+    $prod_sku = $product_rec['SKU'] ;
+    $qty_available = floatval($product_rec['QTY_AVAILABLE']) ;
+    $params['buy_button'] = "<span sku=\"$prod_sku\"" 
+                                      . " class=\"add_cart\" price=\"$price\" product_id=\"$product_id\""
+                                      . " available_qty=\"$qty_available\">"
+                                    . "ADD TO CART"
+                               . "</span>" ;
+    
+  ]]></params_prog>
+  <title><![CDATA[%prod_sku% - Details]]></title>
+
+  <forms_layout><![CDATA[
+    <div class="title_bar card">
+      <h1>%prod_sku%</h1>
+      <h2>(%prod_name%)</h2> 
+      %prod_desc%
+    </div>
+    
+    <div class="card product_wrap"><div>
+        
+      <div id="product_show">
+        <div class="product_images">
+          <div class="%cover_class%">%img_gallery%</div>
+        </div>
+        <div class="product_details">
+          <div class="product_price" price_val="%price_val%"><span class="total_price">%prod_price%</span></div>
+          <div class="details_row">
+            <div><label>Quantity:</label></div>
+            <div><span><input type="number" class="qty_prod" value="1"></span></div>
+          </div>
+          <div class="details_row">
+            <div><label>Weight:</label></div>
+            <div><span>%prod_weight%</span></div>
+          </div>
+          
+          <div class="details_row">
+            <div><label>Shipping:</label></div>
+            <div><span>%prod_shipping%</span></div>
+          </div>
+          %att_docs%
+          <div class="details_row">
+            <div>%buy_button%</div>
+          </div>
+        </div>
+      </div>
+        
+    </div></div>
+    
+    <style type="text/css">
+      .product_wrap           {display: inline-block; width: 65%;}
+      .form_wrap              {display: inline-block; width: 31%; margin: .7em; 
+                              vertical-align: top; min-height: 30em;}
+      .product_images         {float: left; background: #FFFFFF; border: 1px solid #ddd ;}
+      .product_images         {width:500px; height:%prod_images_height%px;}
+      .product_cover          {width:100%; height:500px;line-height: 500px; text-align:center;}
+      .product_cover img      {display:inline-block ;margin: auto; max-height: 500px; max-width: 500px;vertical-align: middle;}
+      .product_gallery        {float:left;}
+      .product_details        {width: 300px; float: right;}
+      .product_price span     {font-size: 32px;}
+      .img_gallery            {cursor: pointer;display:inline-block;vertical-align: middle;}
+      .download_pdf           {vertical-align:middle;}
+      
+      .details_row            {margin: 0 0 10px 0; Padding: 10px; border-bottom: dotted #c8c8c8 1px;}
+      .qty_prod               {width: 70px; font-size: 20px;}
+      .add_cart               {display: block; width: 120px; background-color: #fe0000; cursor: pointer; color: white; font-weight: bold; text-align: center; padding: 10px 0; }
+      .add_cart:hover         { background-color: #f7941e; }
+      input[type='number']    {
+          -moz-appearance:textfield;
+                              }
+      input[type=number]::-webkit-inner-spin-button,
+      input[type=number]::-webkit-outer-spin-button 
+                              {
+          -webkit-appearance: none;
+          margin: 0;
+                              }
+      
+    </style>
+    
+    <style type="text/css">
+    
+      /* Needed for the lightbox */
+      html, body              {height: 100%; width: 100%;}
+      /* CSS for the loading div */
+      .sp_loading             {text-align: center; max-width: 270px; padding: 15px;
+                               border: 5px solid #eee; border-radius: 3px; font-size: 12px; color: #888;}
+      /* Element wrapper */
+      .sp_wrap                {display: none; line-height: 0; font-size: 0;
+                               position: relative;
+                               margin: 0; float: left;
+                              /**************
+                               Set max-width to your thumbnail width
+                              ***************/
+                               max-width: 500px;}
+      /* Thumbnails */
+      .sp_thumbs              {text-align: left; display: inline-block;}
+      .sp_thumbs img          {max-width: 100px; max-height: 100px;}
+      .sp_thumbs a:link, .sp_thumbs a:visited 
+                              {width: 100px; height: 100px; overflow: hidden; opacity: .5;
+                               display: inline-block; background-size: contain; background-repeat: no-repeat;
+                               background-position: center;
+                               -webkit-transition: all .2s ease-out;
+                               -moz-transition: all .2s ease-out;
+                               -ms-transition: all .2s ease-out;
+                               -o-transition: all .2s ease-out;
+                               transition: all .2s ease-out;}
+      .sp_thumbs a:hover      {opacity: 1;}
+      /* Styles for the currently selected thumbnail */
+      .sp_thumbs a:active, .sp-current 
+                              {opacity: 1!important; position: relative;}
+      /* Image currently being viewed */
+      .sp_large               {position: relative; overflow: hidden; top: 0; left: 0;}
+      .sp_large a img         {max-width: 100%;height: auto;}
+      .sp_large a             {display: block;}
+      .square_box             {width:500px; height:500px;line-height: 500px; text-align:center; overflow: hidden;}
+      .square_box img         {display:inline-block ; vertical-align: middle;}
+      /* Panning Zoomed Image */
+      .sp_zoom                {position: absolute; left: -50%;top: -50%;
+                               cursor: -webkit-zoom-in; cursor: -moz-zoom-in;
+                               cursor: zoom-in; display: none;}
+      /* Lightbox */
+      .sp_lightbox            {position: fixed; top: 0; left: 0; height: 100%; width: 100%;
+                               background: rgb(0, 0, 0); background: rgba(0, 0, 0, .9);
+                               z-index: 500; display: none; cursor: pointer;}
+      .sp_lightbox img        {position: absolute; margin: auto; top: 0; bottom: 0; left: 0;
+                               right: 0; max-width: 90%; max-height: 90%; border: 2px solid #fff;}
+      #sp_prev, #sp_next      {position: absolute; top: 50%; margin-top: -25px; z-index: 501;
+                               color: #fff; padding: 14px; text-decoration: none; background: #000;
+                               border-radius: 25px; border: 2px solid #fff; width: 50px; height: 50px;
+                               box-sizing: border-box;transition: .2s;}
+      #sp_prev                {left: 10px;}
+      #sp_prev:before         {content: ''; border: 7px solid transparent; border-right: 15px solid #fff;
+                               position: absolute; top: 16px; left: 7px;}
+      #sp_next                {right: 10px;}
+      #sp_next:before         {content: ''; border: 7px solid transparent; border-left: 15px solid white;
+                               position: absolute; top: 16px; left: 18px;}
+      #sp_prev:hover, #sp_next:hover 
+                              {background: #444;}
+      /* Tweak styles for small viewports */
+      @media screen and (max-width: 400px) 
+                              {
+        .sp_wrap              {margin: 0 0 15px 0;}
+        #sp_prev, #sp_next    {top: auto; margin-top: 0;bottom: 25px;}
+                              }
+
+    
+    </style>
+    
+    <script type="text/javascript">
+      $(function()
+      {
+        // When user changes the quantity of the product update the price
+          $('.qty_prod').bind('keyup', function()
+        {
+          parent_wrap = $(this).parent().parent().parent().parent() ;
+          price_val = parseFloat(parent_wrap.find(".product_price").attr("price_val")) ;
+          
+          qty_prod = parseFloat(parent_wrap.find(".qty_prod").val()) ;
+          if (isNaN(qty_prod))
+            qty_prod = 0 ;
+
+          total_price = (qty_prod * price_val).toFixed(2) ;
+          total_price_str = '$' + floatToCurrency(total_price) ;
+          parent_wrap.find(".total_price").text(total_price_str) ;
+        }) ;
+      }) ; // document.ready
+    </script>
+    
+    <script type="text/javascript">
+      var clicked_toggle ; // The toggle button that has been just clicked
+      $(function()
+      {
+        $(document).on("click",".toggle_down_up",function()
+        {
+          clicked_toggle = $(this) ;
+          
+          // Find the div under the parent and see if it is hidden or not
+          toggle_div = $(this).closest("div").children("div").eq(0) ; 
+          if (toggle_div.css("display") == "none")
+          {
+            toggle_div.slideDown(200,function()
+            {
+              clicked_toggle.attr("src","/~images_folder~/icon_double_up.png") ;
+            }) ;
+          }
+          else
+          {
+            toggle_div.slideUp(200,function()
+            {
+              clicked_toggle.attr("src","/~images_folder~/icon_double_down.png") ;
+            }) ;
+          }
+        })
+      }) ; // document.ready
+    </script>
+    
+    <script type="text/javascript" src="/plugin/product_zoom/smoothproducts.min.js"></script>
+    <script type="text/javascript">
+      /* wait for images to load */
+      $(window).load( function() 
+      {
+        $('.sp_wrap').smoothproducts();
+      });
+    </script>
+      
+    
+  ]]></forms_layout>
+</page>
