@@ -1,0 +1,38 @@
+<html>
+<head>
+<title>Site Location</title>
+</head>
+
+<body>
+
+<H1 style="margin-top:12px;">Contact Us</H1>
+<div id="gen_contact">
+  <div>General Email: <linked_to page_id='contact_form?given_email=~host_company_email~'>~host_company_email~</linked_to></div>
+  <div>Telephone: ~host_company_toll_free~</div>
+  <div>Fax: ~company_toll_free_no_letters~</div>
+  <div>Address: ~host_company_address~,
+~host_company_city~, ~host_company_province~, ~host_company_postal_code~</div>
+</div>
+<br />
+<H2>Our location:</H2>
+<div class="location_map">
+<iframe src="https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d2886.7992746816744!2d-79.67020398431676!3d43.65234436050367!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1s3-6350+Tomken+Road%2C+Mississauga%2C+ON%2C+L5T+1Y3!5e0!3m2!1sen!2sca!4v1519222739171" width="600" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
+</div>
+
+
+<style>
+  .profile_card                        { background-color: #eee; margin: 15px 0 30px 0; padding: 20px 20px 5px 20px; overflow: hidden; min-width: 800px; }
+  .profile_card img                    { float: left; padding-right: 20px; padding-bottom: 20px; }
+  .profile_main div                    { font-size: 16px; margin-bottom: 15px; }
+  .profile_main div:nth-child(1)       { font-size: 24px; }
+  .profile_main div:nth-child(2)       { line-height: 175%; text-align: justify; }
+  .profile_main div:nth-child(n+3) div { font-size: 18px; font-weight: bold; text-align: right; }
+  #gen_contact                         { margin-top: 25px; }
+  #gen_contact div                     { margin-bottom: 8px; font-size: 16px; padding-left: 20px;} 
+  h1                                   { font-size: 24px; }
+  .location_map                        { width: 100%; text-align:center;}
+
+</style>  
+
+</body>
+</html>
