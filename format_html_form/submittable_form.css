@@ -1,0 +1,12 @@
+<style type="text/css">
+
+  textarea                             { height: 250px;}
+  .message                             { margin-top: 15px;}
+  .message dt                          { width:250px; text-align: left; float: left; clear: left;}
+  .message dt                          { font-size: 14px; font-weight: bold;}
+  .message dd                          { margin-bottom: 20px; line-height: 30px;}
+  .text_field                          { width: 250px ;padding: 4px;}
+  .message_text                        { display_block;}
+  .submit                              { margin-left: 250px;}
+
+</style>  
