@@ -1,0 +1,41 @@
+<style type="text/css">
+  #itin_wrap h1                   {margin-top: 1.5em; font-weight: bold;}
+  #itin_wrap p                    {margin: .8em; line-height: 200%;}
+  #itin_wrap label                {float: none; display: inline-block; width: auto; min-width: 10em;}
+  .section_num                    {background: #927F38; padding: .1em .3em .3em .3em; 
+                                  text-align: center; vertical-align: middle; color: #FFF;
+                                  border-radius: .8em; display: inline-block; min-width: 1.1em;}
+  #itin_wrap > div                {margin: 1.5em;}
+  .itin_multi_wrap                {margin: .5em;}
+  .option                         {background: #888; border-radius: .3em; min-width: 5em;
+                                  text-align: center; padding: .3em; color: #FFF;
+                                  margin: .3em; display: inline-block;}          
+  .option.selectable              {cursor: pointer;}          
+  .option.selectable:hover        {background: #429319;}          
+  .option.selected                {background: #429319;}          
+  input[type="text"]              {border-left: 0; border-top: 0; border-right: 0; 
+                                  border-bottom: 1px dashed #999; width: 20em;}  
+  .fa-check                       {margin-right: .3em;}                            
+  .bg_info_wrap label:nth-child(1){width: 10em;}
+  .bg_info_wrap input:nth-child(2){width: 24em;}
+  .bg_info_wrap span:nth-child(3) {margin-left: 3em;}
+  .bg_info_wrap span:nth-child(5) {margin-left: 45em;}
+
+  #guests_wrap label              {width: 26em;}
+  .itin_mline_wrap .add_line      {cursor: pointer;}
+  .itin_mline_wrap .hidden_line   {display: none;}
+  .itin_mline_wrap p input        {width: 30em;}
+  .linens_wrap td, #linens_wrap th{border: 1px dotted #999; padding: .2em .6em;}
+  .linens_wrap                    {border-spacing: 0; width: 50em;}
+  .linens_wrap th:first-child     {width: 25em;}
+  #delivery_wrap td:first-child   {padding: .5em 1.5em .3em 0;}
+  #items_to_leave_wrap            {border-spacing: 0;}
+  #items_to_leave_wrap td         {border: 1px dotted #999; padding: .2em .6em;}
+  #items_to_leave_wrap input[type=number]         
+                                  {width: 6em;}
+  .big_button                     {background: #F7941E; font-weight: bold; 
+                                  font-size: 15px; text-align: center; 
+                                  padding: 8px 15px 7px 15px; 
+                                  color: white; display: inline-block; margin: .4em .8em 0 0;}
+  .big_button:hover               {background: #EC5816; cursor: pointer;}                                    
+</style>
