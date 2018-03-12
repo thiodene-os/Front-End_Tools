@@ -1,0 +1,12 @@
+      <style type="text/css">
+        #dlg_print_sheet img      {max-width: 1.8em; margin-top: 5px; margin-left: 5px;}
+        #dlg_print_sheet ul       {list-style-type: none; width: 280px; padding: 0;}
+        #dlg_print_sheet > div    {margin-left: 3.5em;}
+        #dlg_print_sheet li       {cursor: pointer; background: #BED4E0; height: 20px; 
+                                   padding-top: 5px; margin-top: .2em; text-align: center;}
+        #dlg_print_sheet li:hover, #dlg_print_sheet li.selected 
+                                  {background: #E8D0DC; color:black;}
+        #dlg_print_sheet span     {cursor: pointer; background: #BED4E0; padding: .625em; margin-left: .625em;}
+        #dlg_print_sheet span:hover, #dlg_print_sheet span.selected  
+                                  {background: #E8D0DC;}
+      </style>
