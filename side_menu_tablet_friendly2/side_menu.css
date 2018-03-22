@@ -1,0 +1,26 @@
+<style>
+  @import url(//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css);
+  *,*:after,*:before       { -webkit-box-sizing: border-box;
+                              -moz-box-sizing: border-box; box-sizing: border-box;
+                              padding: 0; margin: 0;}
+        
+  #side_menu                            {width: 275px; border-right: 3px solid #DBDBDB; padding: 1.0em 0em 2.0em 0em;}
+  #side_menu a                          {color: #FFF; font-size: 1.4em; font-family: Courier;
+                                      font-weight: bold; padding-left:.5em; 
+                                      margin-top: .3em; display: inline-block; width: 230px;}
+  #side_menu a:first-child div          {margin-top: 0;}
+  #side_menu a div:hover                {background: #606060;}
+        
+  #side_menu                { position: relative; width:40px; overflow:hidden;
+                              background: #B8B19E;}
+  #side_menu div div        { width:272px; padding: 0.5em 0 0.5em 0;}
+  #side_menu div div:hover  { background: #606060;}
+  #side_menu:hover          { width:275px; overflow:visible;
+                              -webkit-transition:width .2s linear;
+                              transition:width .2s linear;
+                              -webkit-transform:translateZ(0) scale(1,1);
+                              z-index:1000;}
+  .fa-2x                    { font-size: 2em; margin-top:10px;}
+  .fa                       { width: 36px; height: 30px; font-size:20px; color: white;
+                              text-align:center; vertical-align:middle;}
+</style> 
