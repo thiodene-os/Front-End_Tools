@@ -1,0 +1,29 @@
+<style type="text/css">
+  #month_nav                {font-size: larger; text-align: center;}
+  #month_nav span           {margin: 0 9px;}
+  #month_nav img            {margin-bottom: -.15em;}
+  ##cur_form_name#          {margin: auto; padding: 2em; display: block;
+                            opacity: .9; background: #FFF;}
+  #cur_month_info h1        {font-size: 2em; margin: 0;}
+  #cur_month_info h3        {font-size: 1.3em;}
+  #cur_month_info > span:nth-child(3)   
+                            {font-size: 2em;}
+  .calendar_date				    {background: #E5D07B; font-weight: bold; padding: 3px; 
+                            text-align: left; width: 98%; margin: -1px 0 0 -1px;}
+  #calendar                 {margin: 1em;}
+  #calendar tr:first-child  {background: #C5B469;}
+  #calendar th#cur_month    {padding: 4px; color: #FFF; font-size: 1.09em;}
+  #calendar td				      {vertical-align: top; border: 1px solid #C5B469; 
+                            width: 210px; text-align: center; height: 100px;}
+  #calendar #weekdays_row	  {height: 20px; background: #E5D07B;}
+  #cal_legend span          {padding: 2px 4px; display: inline-block; width: 108px;
+                            text-align: center;} 
+  .open_hour                {margin-top: 1em;}                          
+  .open_hour img            {margin: 0 0 -.5em .8em;}    
+  .cur_booking              {text-align: left; margin: .5em;
+                            border: 2px solid #0C8484;}  
+  .cur_booking > p          {margin: .5em;}  
+  .cur_booking h3           {color: #FFF; background: #0C8484; padding: .4em; margin-top:0px !important;}
+  .date_inactive            {color: #999;}
+
+</style>
