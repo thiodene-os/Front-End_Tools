@@ -1,0 +1,3 @@
+# Simple call to ptTimeSelect with no paramters defined.
+Note: In order for this sample file to work, an internext conection is needed, 
+since it loads jQuery and jQuery UI stylesheet from Google's CDN.
