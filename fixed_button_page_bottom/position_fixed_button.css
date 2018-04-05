@@ -1,0 +1,9 @@
+.bottom_bar                           {position: fixed; bottom: 0px; background: rgba(209,214,210,0.6); 
+                                      width: 98%;
+                                      border: 1px solid #575C63; border-bottom: 0; text-align: center; 
+                                      border-top-right-radius: 6px; border-top-left-radius: 6px;}
+.big_button                           {background: #F7941E; font-weight: bold; 
+                                      font-size: 20px; text-align: center; 
+                                      padding: 8px 15px 7px 15px; 
+                                      color: white; display: inline-block; margin: 1.0em .8em 1.0em 0;}
+.big_button:hover                     {background: #EC5816; cursor: pointer;} 
