@@ -1,0 +1,12 @@
+<style type="text/css">
+
+
+  .itin_option_wrap               {display: none; width:100%;}
+  .itin_option_header             {cursor: pointer; width:100%;}
+  .time_hour                      {margin-right:10px;}
+  .time_minute                    {margin-left:10px;}
+  .fa-2x                          {font-size: 20px; margin-bottom:10px; margin-right:2em;
+                                   float:right; color: #0782C1; }
+  h1                              {display: inline;}
+  .arrow_up                       {display: none;}
+</style>  
