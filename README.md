@@ -22,3 +22,10 @@ MYFONTS/WHATTHEFONT
 https://www.myfonts.com/WhatTheFont/
 To Know which font has been used from a picture
 
+HTML COLOR CODES
+https://htmlcolorcodes.com/
+Convert basic colors into the HTML Hexadecimal format ex: #2980b9
+
+PDF to IMAGE
+http://pdftoimage.com/
+Converts a PDF generated file into its static IMAGE equivalent
