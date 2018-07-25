@@ -1,0 +1,59 @@
+<style type="text/css">
+.scroll {
+    /* width: 100%; */ /* Optional */
+    /* border-collapse: collapse; */
+    border-spacing: 0;
+    border: 1px solid black;
+}
+
+.scroll tbody,
+.scroll thead { display: block;}
+
+.scroll thead tr th { 
+    height: 50px;
+    line-height: 50px;
+	color: black;
+    text-align: left;
+}
+
+.scroll tbody {
+    height: 120px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.scroll tbody { border-top: 1px solid black; }
+
+.scroll tbody td, .scroll thead th {
+    /* width: 20%; */ /* Optional */
+    border-right: 1px solid white;
+    /* white-space: nowrap; */
+}
+
+.scroll tbody tr td { 
+    height: 40px;
+    line-height: 40px;
+    text-align: left;
+}
+
+.scroll tbody tr:hover { 
+    background-color: #F0F0F0;
+}
+
+.scroll tbody td:last-child, .scroll thead th:last-child {
+    border-right: none;
+	width: 70px;
+}
+.scroll tbody td:first-child, .scroll thead th:first-child {
+	width: 180px;
+}
+.scroll tbody td:nth-child(2), .scroll thead th:nth-child(2) {
+	width: 120px;
+}
+.scroll tbody td:nth-child(3), .scroll thead th:nth-child(3) {
+	width: 100px;
+}
+.scroll tbody td:nth-child(4), .scroll thead th:nth-child(4) {
+	width: 80px;
+}
+</style>
