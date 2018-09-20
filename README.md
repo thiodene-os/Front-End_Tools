@@ -29,3 +29,7 @@ Convert basic colors into the HTML Hexadecimal format ex: #2980b9
 PDF to IMAGE
 http://pdftoimage.com/
 Converts a PDF generated file into its static IMAGE equivalent
+
+COLOR CONVERTER
+https://www.w3schools.com/colors/colors_converter.asp
+Converts RGB color to Anything else and vice-versa
