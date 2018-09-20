@@ -4,3 +4,6 @@ https://codepen.io/jhawes/pen/ujdgK
 
 # Wind direction
 https://uni.edu/storm/Wind%20Direction%20slide.pdf
+
+# Google Map Markers
+https://github.com/Concept211/Google-Maps-Markers
