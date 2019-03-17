@@ -1,0 +1,348 @@
+Total 1 Records Found.
+
+<page page_id="register_your_company">
+  <page_path>/sys_user/register_your_company.php</page_path>
+  <use_this_layout>public_page_layout</use_this_layout>
+  <keep_in_history>No</keep_in_history>
+  <title><![CDATA[Register your Company]]></title>
+  <form name="new_registration" type="Misc">
+    <is_submittable>Yes</is_submittable>
+    <element_names_prefix></element_names_prefix>
+    <form_body>
+      <scr_section>company_info</scr_section>
+        <scr_elm elm_id="host_company_company_name">
+          <attribs>class="form-control"</attribs>
+          <layout><![CDATA[
+            <div class="form-group">
+              <label class="col-xs-6 col-md-4 col-offset-md-8 text-right"><h4><b>Company Info</b></h4></label>
+              <div class="clearfix"></div>
+            </div>
+            <div class="form-group">
+              <label class="col-xs-6 col-md-4 text-right">#label#:</label>
+              <div class="col-xs-6 col-md-8">#element#</div>
+              <div class="clearfix"></div>
+            </div>
+          ]]></layout>
+        </scr_elm> 
+        <scr_elm elm_id="host_company_lnk_business_cat">
+          <attribs>class="form-control"</attribs>
+          <show_on_no_value><![CDATA[~def_show_on_no_value~]]></show_on_no_value>
+          <default_value><![CDATA[~def_show_on_no_value~]]></default_value>
+          <layout><![CDATA[
+            <div class="form-group">
+              <label class="col-xs-6 col-md-4 text-right">#label#:</label>
+              <div class="col-xs-6 col-md-8">#element#</div>
+              <div class="clearfix"></div>
+            </div>
+        ]]></layout> 
+        </scr_elm>
+        <scr_elm elm_id="host_company_province">
+          <attribs>class="form-control"</attribs>
+          <show_on_no_value><![CDATA[~def_show_on_no_value~]]></show_on_no_value>
+          <default_value><![CDATA[~def_show_on_no_value~]]></default_value>
+          <layout><![CDATA[
+            <div class="form-group">
+              <label class="col-xs-6 col-md-4 text-right">#label#:</label>
+              <div class="col-xs-6 col-md-8">#element#</div>
+              <div class="clearfix"></div>
+            </div>
+          ]]></layout>
+        </scr_elm>
+        <scr_elm elm_id="host_company_country">
+          <attribs> class="form-control" </attribs>
+          <show_on_no_value><![CDATA[~def_show_on_no_value~]]></show_on_no_value>
+          <default_value><![CDATA[~def_show_on_no_value~]]></default_value>
+          <layout><![CDATA[
+            <div class="form-group">
+              <label class="col-xs-6 col-md-4 text-right">#label#:</label>
+              <div class="col-xs-6 col-md-8">#element#</div>
+              <div class="clearfix"></div>
+            </div>
+          ]]></layout>
+        </scr_elm>
+      <scr_section>user_info</scr_section>
+        <scr_elm elm_id="sys_user_first_name">
+          <attribs> class="form-control" </attribs>
+          <layout><![CDATA[
+            <div class="form-group">
+              <label class="col-xs-6 col-md-4 col-offset-md-8 text-right"><h4><b>User Info</b></h4></label>
+              <div class="clearfix"></div>
+            </div>
+            <div class="form-group">
+               <label class="col-xs-6 col-md-4 text-right">#label#:</label>
+               <div class="col-xs-6 col-md-8" >#element#</div>
+               <div class="clearfix"></div>
+            </div>
+        ]]></layout>
+        </scr_elm>
+        <scr_elm elm_id="sys_user_last_name">
+          <attribs> class="form-control" </attribs>
+          <layout><![CDATA[
+            <div class="form-group">
+              <label class="col-xs-6 col-md-4 text-right">#label#:</label>
+              <div class="col-xs-6 col-md-8">#element#</div>
+              <div class="clearfix"></div>
+            </div>
+          ]]></layout>
+        </scr_elm>
+        <scr_elm elm_id="sys_user_email_id">
+          <attribs> class="form-control" </attribs>
+          <layout><![CDATA[
+            <div class="form-group">
+              <label class="col-xs-6 col-md-4 text-right">#label#:</label>
+              <div class="col-xs-6 col-md-8">#element#</div>
+              <div class="clearfix"></div>
+            </div>
+          ]]></layout>
+        </scr_elm>
+        <scr_elm elm_id="sys_user_pwd">
+          <attribs> class="form-control" </attribs>
+          <layout><![CDATA[
+            <div class="form-group">
+              <label class="col-xs-6 col-md-4 text-right">#label#:</label>
+              <div class="col-xs-6 col-md-8">#element#</div>
+              <div class="clearfix"></div>
+            </div>
+          ]]></layout>
+        </scr_elm>
+        <scr_elm elm_id="sys_user_re_pwd">
+          <attribs>class="form-control"</attribs>
+          <layout><![CDATA[
+            <div class="form-group">
+              <label class="col-xs-6 col-md-4 text-right">#label#:</label>
+              <div class="col-xs-6 col-md-8">#element#</div>
+              <div class="clearfix"></div>
+            </div>
+          ]]></layout>
+        </scr_elm>
+    </form_body>
+    <form_footer>
+      <scr_section>form_btn</scr_section>
+        <action_elm elm_id="action_misc">
+          <label>Continue</label>
+          <attribs>class="btn btn-block fbtn"</attribs>
+          <custom_html_id>btn_register_me</custom_html_id>
+          <do_after>
+            <program_code>
+           
+              //g-recaptcha-response has the string sent by google recapcha 
+              $captcha = '' ;
+              if(isset($_POST['g-recaptcha-response']))
+                $captcha = $_POST['g-recaptcha-response'];
+        
+              $ip = $_SERVER['REMOTE_ADDR'];
+              
+              // If !recapcha means user does not check the recapcha               
+              if(empty($captcha))
+              {
+                setGlobalMsg("Please verify that you are no a robot!") ;
+                return false ;
+              }
+              
+              // SecretKey assign by google recapcha
+              $secretKey = "6LeMZSQUAAAAAARgau6O6Qu7St2r-EJV4wuTiQZW";  
+              
+              // use curl to POST secretkey,response and ip to google URL         
+              $opts = array(
+                          'remoteip' => $ip,
+                          'response' => $captcha,
+                          'secret' => $secretKey
+                          );
+            
+              $url = "https://www.google.com/recaptcha/api/siteverify";
+              $curl = curl_init($url);
+              curl_setopt($curl, CURLOPT_POST, 1); // Means the curl method is POST
+              curl_setopt($curl, CURLOPT_POSTFIELDS,$opts);
+
+              // receive server response in json format...
+              curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+              $server_output = curl_exec ($curl);
+              $server_output_json = json_decode($server_output,true);
+              curl_close ($curl);  
+              
+              // If success=1 means user is not robot 
+      
+              if($server_output_json['success'] == 1)
+              {
+                // Captcha is good, so register user
+                registerNewHostCompany('{'. $_POST['reg_info'] . '}') ;
+              } 
+              else 
+                return false ;
+            </program_code>
+          </do_after>    
+        </action_elm>
+    </form_footer>
+    <content_elm id="js_handle_reg"><![CDATA[
+      <script type="text/javascript">
+        $(function()
+        {
+          $("#btn_register_me").click(function()
+          {
+            // Create a json string of all the info and pass to php to create the user
+            // and company
+            is_error = false ;
+            reg_info = '' ; // Keep the final string here
+            
+            // Company name
+            if (! is_error)
+            {
+              company_name = $.trim($("#company_name").val()) ;
+              
+              // remove double and single quote
+              company_name = company_name.replace(/"/g,"") ;  
+              company_name = company_name.replace(/'/g,"") ;
+
+              if (company_name == '' ||  company_name.length < 3)
+              {
+                is_error = true ;
+                xmlbWarn("Please enter full business name. Min 3 characters.") ;
+              }
+              else
+                reg_info += '"name": "' + xmlbEncodeForAJAX(company_name) + '"' ;
+            } // name
+            
+            // Company category
+            if (! is_error)
+            {
+              cat = $("#lnk_business_cat").val() ;
+              if (cat == '~def_show_on_no_value~')
+              {
+                is_error = true ;
+                xmlbWarn("Please select the main business category.") ;
+              }
+              else
+                reg_info += ', "cat": "' + cat + '"' ;
+            } 
+            
+            // Province
+            if (! is_error)
+            {
+              province = $("#province").val() ;
+              if (province == '~def_show_on_no_value~')
+              {
+                is_error = true ;
+                xmlbWarn("Please select province.") ;
+              }
+              else
+                reg_info += ', "province": "' + province + '"' ;
+            } 
+            
+            // Country
+            if (! is_error)
+            {
+              country = $("#country").val() ;
+              if (country == '~def_show_on_no_value~')
+              {
+                is_error = true ;
+                xmlbWarn("Please select country.") ;
+              }
+              else
+                reg_info += ', "country": "' + country + '"' ;
+            } 
+            
+            // First name
+            if (! is_error)
+            {
+              first_name = $.trim($("#first_name").val()) ;
+              
+              // remove double and single quote
+              first_name = first_name.replace(/"/g,"") ;  
+              first_name = first_name.replace(/'/g,"") ;
+
+              if (first_name == '' ||  first_name.length < 2)
+              {
+                is_error = true ;
+                xmlbWarn("Please enter your first name with min 2 characters") ;
+              }
+              else
+                reg_info += ', "first_name": "' + xmlbEncodeForAJAX(first_name) + '"' ;
+            } // first name
+            
+            // Last name
+            if (! is_error)
+            {
+              last_name = $.trim($("#last_name").val()) ;
+              
+              // remove double and single quote
+              last_name = last_name.replace(/"/g,"") ;  
+              last_name = last_name.replace(/'/g,"") ;
+
+              if (last_name == '' ||  last_name.length < 2)
+              {
+                is_error = true ;
+                xmlbWarn("Please enter your last name with min 2 characters") ;
+              }
+              else
+                reg_info += ', "last_name": "' + xmlbEncodeForAJAX(last_name) + '"' ;
+            } // last name
+            
+            // Email
+            if (! is_error)
+            {
+              email = $.trim($("#email_id").val()) ;
+              
+              // remove double and single quote
+              email = email.replace(/"/g,"") ;  
+              email = email.replace(/'/g,"") ;
+
+              if (email == '' ||  email.length < 5)
+              {
+                is_error = true ;
+                xmlbWarn("Please enter your main or business email") ;
+              }
+              else
+                reg_info += ', "email": "' + xmlbEncodeForAJAX(email) + '"' ;
+            } // email
+            
+            // Password
+            if (! is_error)
+            {
+              pwd = $.trim($("#pwd").val()) ;
+              
+              // remove spaces
+              pwd = pwd.replace(/ /g,"") ;  
+
+              if (pwd == '' || pwd.length < 6)
+              {
+                is_error = true ;
+                xmlbWarn("Please enter a password at least 6 characters long") ;
+              }
+              else
+                reg_info += ', "pwd": "' + xmlbEncodeForAJAX(pwd) + '"' ;
+            } // pwd
+            
+            // All good, so proceed with the register
+            if (! is_error)
+            {
+              // Add the hidden input to the form to send reg_info value
+              $('#frm_new_registration').append('<input type="hidden" name="reg_info" id="reg_info" />'); 
+              $('#reg_info').val(reg_info);
+            }
+            else
+              return false ; // The error message already displayed
+          }) ; // Click on btn_register_me
+        }) ; // document.ready
+      </script>
+        
+    ]]></content_elm>
+    <layout><![CDATA[
+
+      <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+      <div class="row"> 
+        <div class="col-xs-12 col-md-6" style = "padding:1em">
+          #company_info#
+        </div>
+        <div class="col-xs-12 col-md-6 " style = "padding:1em">
+          #user_info#
+        </div>
+        <div class="g-recaptcha col-xs-12 col-md-offset-2 col-md-10" data-sitekey="6LeMZSQUAAAAAEGZJ4uC3eAAzMU97VDSsYKpnsU_"></div>
+        <div class="col-xs-12 col-md-offset-2 col-md-4 col-md-offset-6" style = "margin-top:1em">#form_btn#</div>
+      </div>
+      #js_handle_reg#
+    ]]></layout>
+  </form>
+  
+</page>
+
+Total 1 Records Found.
