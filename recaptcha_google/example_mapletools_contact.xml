@@ -1,0 +1,278 @@
+Total 1 Records Found.
+
+<page page_id="contact">
+  <page_path>/contact.php</page_path>
+  <title><![CDATA[Contact]]></title>
+  <use_this_layout>public_page_layout</use_this_layout>
+  <form name="bottom_tiles" type="List">
+    <is_submittable>No</is_submittable>
+    <table_name>STAFF_PROFILE</table_name>
+    <id_column>STAFF_PROFILE_ID</id_column>
+    <query>SELECT *, UID AS STAFF_PROFILE_ID FROM STAFF_PROFILE WHERE IS_ACTIVE = ~yes~</query>
+    <sort_by>SHOW_ORDER</sort_by>
+    <form_body>
+      <scr_section>form_body</scr_section>
+        <format_item><![CDATA[<div class="profile_card">]]></format_item>
+        <scr_elm elm_id="staff_profile_portrait">
+          <layout><![CDATA[#element#]]></layout>
+          <file_name_template>staff_profile_public_%UID%.#file_extension#</file_name_template>
+          <max_width>200</max_width>
+          <max_height>200</max_height>
+        </scr_elm>
+        <format_item><![CDATA[<div class="profile_main"><div>]]></format_item>
+        <scr_elm elm_id="staff_profile_name">
+          <layout><![CDATA[#element#]]></layout>
+        </scr_elm>
+        <scr_elm elm_id="staff_profile_position">
+          <layout><![CDATA[&nbsp;&mdash; <b>#element#</b>]]></layout>
+        </scr_elm>
+        <format_item><![CDATA[</div><div>]]></format_item>
+        <scr_elm elm_id="staff_profile_bio">
+          <layout><![CDATA[#element#]]></layout>
+        </scr_elm>
+        <format_item><![CDATA[</div><div><div>]]></format_item>
+        <scr_elm elm_id="staff_profile_phone">
+          <layout><![CDATA[#element#]]></layout>
+        </scr_elm>
+        <format_item><![CDATA[</div><div>]]></format_item>
+        <scr_elm elm_id="staff_profile_email">
+          <linked_to>contact_form?staff_profile_id=#cur_record#%STAFF_PROFILE_ID%</linked_to>
+          <layout><![CDATA[#element#]]></layout>
+        </scr_elm>
+        <format_item><![CDATA[</div></div></div></div>]]></format_item>
+    </form_body>
+    <layout><![CDATA[  
+      #form_body#
+      <H1 style="margin-top:12px;">Contact Us</H1>
+      <div id="gen_contact">
+        <div>General Email: <linked_to page_id='contact_form?given_email=~host_company_email~'>~host_company_email~</linked_to></div>
+        <div>Telephone: ~host_company_toll_free~</div>
+        <div>Fax: ~company_toll_free_no_letters~</div>
+        <div>Address: ~host_company_address~,
+    ~host_company_city~, ~host_company_province~, ~host_company_postal_code~</div>
+      </div>
+      <br />                           
+    ]]></layout>
+  </form>
+  <form name="new_customer" type="SingleNew">
+    <is_submittable>Yes</is_submittable>
+    <table_name>CUSTOMER</table_name>
+    <id_column>UID</id_column>
+    <params_prog><![CDATA[
+      //$params[''] = $ ;
+    ]]></params_prog>
+    <form_body>
+      <scr_section>form_body</scr_section>
+        <format_item><![CDATA[]]></format_item>
+        <scr_elm elm_id="customer_contact_first_name">
+        </scr_elm>
+        <format_item><![CDATA[]]></format_item>
+        <scr_elm elm_id="customer_contact_last_name">
+        </scr_elm>
+        <format_item><![CDATA[]]></format_item>
+        <scr_elm elm_id="customer_main_email">
+        </scr_elm>
+        <format_item><![CDATA[]]></format_item>
+        <scr_elm elm_id="customer_customer_name">
+        </scr_elm>
+        <format_item><![CDATA[]]></format_item>
+        <scr_elm elm_id="customer_main_phone">
+        </scr_elm>
+        <format_item><![CDATA[]]></format_item>
+        <scr_elm elm_id="customer_contact_contact_notes">
+        </scr_elm>
+        <format_item><![CDATA[]]></format_item>
+    </form_body>
+    <form_footer>
+      <scr_section>form_footer</scr_section>
+        <action_elm elm_id="action_edit">
+          <label>Send Message</label>
+          <custom_html_id>btn_send_customer_message</custom_html_id>
+          <do_after>
+            <program_code><![CDATA[ 
+           
+              //First check g-recaptcha-response 
+              $captcha = '' ;
+              if(isset($_POST['g-recaptcha-response']))
+                $captcha = $_POST['g-recaptcha-response'];
+        
+              $ip = $_SERVER['REMOTE_ADDR'];
+              
+              // If no ReCAPTCHA click by customer               
+              if(empty($captcha))
+              {
+                setGlobalMsg("Please verify that you are not a robot!") ;
+                return false ;
+              }
+              
+              // SecretKey given by google recapcha
+              $secretKey = "6LeQ7UoUAAAAAIS786F6Sl-sQAP5n1L20GMMmMuy";  
+              
+              // use curl to POST secretkey,response and ip to google URL         
+              $opts = array(
+                          'remoteip' => $ip,
+                          'response' => $captcha,
+                          'secret' => $secretKey
+                          );
+              
+              $url = "https://www.google.com/recaptcha/api/siteverify";
+              $curl = curl_init($url);
+              curl_setopt($curl, CURLOPT_POST, 1); // Means the curl method is POST
+              curl_setopt($curl, CURLOPT_POSTFIELDS,$opts);
+
+              // receive server response in json format...
+              curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+              $server_output = curl_exec ($curl);
+              $server_output_json = json_decode($server_output,true);
+              curl_close ($curl);  
+              
+              // If success=1 means user is not robot 
+      
+              if($server_output_json['success'] == 1)
+              {
+                // Staff member to send this message to
+                $staff_email = 'serge@azarbod.com' ;
+                
+                // ReCaptcha is good, so send the message to Maple Tools
+                $email_params = array() ;
+                $email_params['to_email'] = $staff_email ;
+                $email_params['from_name'] = $_POST['new_customer_customer_name'] ;
+                $email_params['from_email'] = $_POST['new_customer_main_email'] ;
+                $template_params = array() ;
+                $template_params['name'] = $_POST['new_customer_first_name'] 
+                                           . ' ' . $_POST['new_customer_last_name'] ;
+                $template_params['phone'] = $_POST['new_customer_main_phone'] ;
+                $template_params['email'] = $_POST['new_customer_main_email'] ;
+                $inquiry = htmlspecialchars($_POST['new_customer_contact_notes']) ;
+                $inquiry = trim(str_replace("\n","<br />",$inquiry)) ;
+                $inquiry = removeExtraSpaces($inquiry) ;
+                $inquiry = fixEncoding($inquiry) ;
+                $template_params['inquiry'] = $inquiry ;
+                $mail = new JBurstMailer($email_params) ;
+                $mail -> template_id = 'Contact Form' ;
+                $mail -> template_params = $template_params ;
+                $mail -> how_generated = EMAIL_HOW_GEN_CONTACT_PAGE ;
+                $mail -> priority = EQ_PRIORITY_URGENT ;
+                $mail -> Send() ;
+              } 
+              else 
+                return false ;
+            ]]></program_code>
+          </do_after> 
+        </action_elm>
+    </form_footer>
+    <content_elm id="js_handle_send_message"><![CDATA[
+    
+      <script type="text/javascript">
+        $(function()
+        {
+          // Handle the user information, before sending the message
+          // Not handling the Re-CAPTCHA because it needs POST
+          $("#btn_send_customer_message").click(function()
+          {
+            // Confirm sending this message
+            if (! confirm("Do you want to send this Message?"))
+              return false ;
+              
+            // Customer Information
+            first_name = $("#new_customer_first_name").val() ;
+            last_name = $("#new_customer_last_name").val() ;
+            customer_name = first_name + last_name ;            
+            if (customer_name == "")
+            {
+              alert("Please enter valid Names!") ;
+              return false ;
+            }
+            
+            customer_email = $("#new_customer_main_email").val() ; 
+            if (customer_email == "")
+            {
+              alert("Please enter a Email!") ;
+              return false ;
+            }
+            
+            company_name = $("#new_customer_customer_name").val() ; 
+            if (company_name == "")
+            {
+              alert("Please enter a valid Company Name!") ;
+              return false ;
+            }
+            
+            customer_phone = $("#new_customer_main_phone").val() ; 
+            if (customer_phone == "")
+            {
+              alert("Please enter a valid Phone Number!") ;
+              return false ;
+            }
+            
+            customer_message = $("#new_customer_contact_notes").val() ; 
+            if (customer_message == "")
+            {
+              alert("Please enter a Message!") ;
+              return false ;
+            }
+           
+            
+          });
+          
+        }) ;
+        
+      </script>
+    
+    ]]></content_elm>
+    <layout><![CDATA[
+      <br />
+      <h2>Send Us A Message:</h2>
+      <br />
+      #form_body#
+      <br />
+      <div class="g-recaptcha" data-sitekey="6LeQ7UoUAAAAAOmTkKQ5ZsggorSeByvl2sH2-Kmi"></div>
+      <br />
+      <div class="form_footer">#form_footer#</div>
+      
+      #js_handle_send_message#
+    ]]></layout>
+  </form>
+  
+  <forms_layout><![CDATA[ 
+    
+    #bottom_tiles#
+    
+    #new_customer#
+    <br />
+    <br />
+    
+    <H2>Our location:</H2>
+    <br />
+    <div class="location_map">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d11547.207743002386!2d-79.667751!3d43.652289!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x7bd66b426ca88775!2sMaple+Tools+Supply+Ltd.!5e0!3m2!1sen!2sca!4v1519326252240" width="800" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
+    </div>
+    
+    <style>
+      .profile_card                        { background-color: #eee; margin: 15px 0 30px 0; padding: 20px 20px 5px 20px; overflow: hidden; min-width: 800px; }
+      .profile_card img                    { float: left; padding-right: 20px; padding-bottom: 20px; }
+      .profile_main div                    { font-size: 16px; margin-bottom: 15px; }
+      .profile_main div:nth-child(1)       { font-size: 24px; }
+      .profile_main div:nth-child(2)       { line-height: 175%; text-align: justify; }
+      .profile_main div:nth-child(n+3) div { font-size: 18px; font-weight: bold; text-align: right; }
+      #gen_contact                         { margin-top: 25px; }
+      #gen_contact div                     { margin-bottom: 8px; font-size: 16px; padding-left: 20px;} 
+      h1                                   { font-size: 24px; }
+      .location_map                        { width: 100%; text-align:center;}
+      textarea                             { height: 100px;}
+      .message                             { margin-top: 15px;}
+      .message dt                          { width:250px; text-align: left; float: left; clear: left;}
+      .message dt                          { font-size: 14px; font-weight: bold;}
+      .message dd                          { margin-bottom: 20px; line-height: 30px;}
+      .text_field                          { width: 250px ;padding: 4px;}
+      .message_text                        { display_block;}
+      #btn_send_customer_message           { margin-left: 125px;}
+      .g-recaptcha                         { margin-left: 125px;}
+      
+    </style>
+    
+  ]]></forms_layout>
+  
+</page>
+
+Total 1 Records Found.
