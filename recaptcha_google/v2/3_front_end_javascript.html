@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src='https://www.google.com/recaptcha/api.js'></script>
+<script>
+$( function() {
+$.widget( "custom.iconselectmenu", $.ui.selectmenu, {
+  _renderItem: function( ul, item ) {
+	var li = $( "<li>" ),
+	  wrapper = $( "<div>", { text: item.label } );
+
+	if ( item.disabled ) {
+	  li.addClass( "ui-state-disabled" );
+	}
+
+	$( "<span>", {
+	  style: item.element.attr( "data-style" ),
+	  "class": "ui-icon " + item.element.attr( "data-class" )
+	})
+	  .appendTo( wrapper );
+
+	return li.append( wrapper ).appendTo( ul );
+  }
+});
+
+$( "#country_code" )
+  .iconselectmenu()
+  .iconselectmenu( "menuWidget" )
+	.addClass( "ui-menu-icons customicons" );
+} );
+</script>
+<style type="text/css">
+@import url(/includes/css/common.css);
+@import url(/includes/css/login.css);   
+
+@import url(/includes/css/jquery-ui.css);  
+/* select with custom icons */
+.ui-selectmenu-menu .ui-menu.customicons .ui-menu-item-wrapper {
+  padding: 0.5em 0 0.5em 3em;
+}
+.ui-selectmenu-menu .ui-menu.customicons .ui-menu-item .ui-icon {
+  height: 24px;
+  width: 36px;
+  top: 0.1em;
+}
+.ui-icon.canada {
+  background: url("/images/icon_canada24.jpg") 0 0 no-repeat;
+}
+.ui-icon.usa {
+  background: url("/images/icon_usa24.jpg") 0 0 no-repeat;
+}
+</style>
+
+<script>
+$( function() {
+$.widget( "custom.iconselectmenu", $.ui.selectmenu, {
+  _renderItem: function( ul, item ) {
+	var li = $( "<li>" ),
+	  wrapper = $( "<div>", { text: item.label } );
+
+	if ( item.disabled ) {
+	  li.addClass( "ui-state-disabled" );
+	}
+
+	$( "<span>", {
+	  style: item.element.attr( "data-style" ),
+	  "class": "ui-icon " + item.element.attr( "data-class" )
+	})
+	  .appendTo( wrapper );
+
+	return li.append( wrapper ).appendTo( ul );
+  }
+});
+
+$( "#country_code" )
+  .iconselectmenu()
+  .iconselectmenu( "menuWidget" )
+	.addClass( "ui-menu-icons" );
+} );
+</script>
+<script type="text/javascript">
+
+  function focusPhonePrefix(id) {
+    var phone = document.getElementById(id);
+
+    if (phone.value.length == 0) {
+      phone.value = '(';
+    }
+  }
+
+  function blurPhonePrefix(id) {
+    var phone = document.getElementById(id);
+
+    if (phone.value === '(') {
+      phone.value = '';
+    }
+  }
+
+  function keyPress(e, id) {
+    var phone = document.getElementById(id);
+
+    if (phone.value.length === 0) {
+      phone.value = '(';
+    } else {
+      var prefix = phone.value.slice(0, 1);
+      if (prefix != '(') {
+        phone.value = '(' + phone.value;
+      }
+    }
+
+    if (e.key !== "Backspace") {
+      if (phone.value.length === 4) {
+        phone.value = phone.value + ')';
+      }
+      if (phone.value.length === 5) {
+        phone.value = phone.value + ' ';
+      }
+      if (phone.value.length === 9) {
+        phone.value = phone.value + '-';
+      }
+    }
+  }
+
+</script>
+<script type="text/javascript">
+$(document).ready(function() {
+  
+  // Sign up the user
+  $(".btn_signup").click(function()
+  {
+    var email = $("#email").val() ;
+    var password = $("#password").val() ;
+    var country_code = $("#country_code").val() ;
+    var country = $("#country_code").find(':selected').attr('data-class') ;
+    var phone = $("#form_phone").val() ;
+    var g_recaptcha_response = $(".g-recaptcha-response").val() ;
+    // Validate the email address or accept Admin
+    if (!validateEmail(email))
+    {
+      alert('Please enter a valid Email address') ;
+      return false;
+    }
+	// Validate password
+    if (password.length < 8)
+    {
+      alert('Please enter a valid Password (at least 8 characters)') ;
+      return false;
+    }
+    // Validate phone number
+    phone = $.trim(phone) ;
+    // Replace Dynamic Phone Input string non-wanted characters
+    phone = phone.replace("(", "");
+    phone = phone.replace(")", "");
+    phone = phone.replace(" ", "");
+    phone = phone.replace("-", "");
+    phone = $.trim(phone) ;
+    if (phone != "")
+    {
+	 if(isNaN(phone) || phone.length < 10){
+      alert('Please enter a valid Phone Number1') ;
+      return false;
+	 }
+	}
+	else
+	{
+      alert('Please enter a valid Phone Number2') ;
+      return false;
+	}
+	// Verify the recaptcha
+    if (!g_recaptcha_response)
+    {
+      alert('Please verify that you are not a robot!') ;
+      return false;
+    }
+	
+    // If everything OK query AJAX for login credentials
+    $.ajax({
+        type: 'GET',
+        url: "/includes/php/ajax/verify_signup.php",             
+        dataType: "html",   //expect html to be returned   
+        data: {email: email,password: password, country:country, country_code:country_code, phone: phone,g_recaptcha_response:g_recaptcha_response, signup: true},
+        success: function(response)
+        {
+          // If the response has content it means the Login failed
+          if (response.length == 32)
+            window.location.href = 'http://map.forevent.com/signup/verify.php?token=' + response ; // Overview page for now
+          else
+            $("#submitted_container").html(response);
+        }
+    });
+    
+  });
+
+});
+
+// In case email Addresses are accepted too!
+function validateEmail(email) {
+  var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(email);
+}
+</script>
+</head>
+<body>
+
+<!-- Index content -->
+<form id="form_login">
+<div class="signup">
+  <p>
+    <a href="http://map.forevent.com"><img id="logo" src="/images/forevent_toronto_i.png"  /></a>
+  </p>
+  <p>
+    <input type="text" id="email" placeholder="Email" />
+  </p>
+  <p>
+    <input type="password" id="password" placeholder="Password" />
+  </p>
+  <p>
+	<select name="country_code" id="country_code">
+      <option value="1" data-class="canada">+1</option>
+      <option value="1" data-class="usa">+1</option>
+	</select>
+    <input id="form_phone" type="text" maxlength="14" placeholder="Mobile Phone Number" onfocus='focusPhonePrefix("form_phone")' onblur='blurPhonePrefix("form_phone")' onkeypress='keyPress(event,"form_phone")' />
+  </p>
+  <p>
+  <div class="g-recaptcha" data-sitekey="6LXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"></div>
+  </p>
+  <p>
+    <input type="hidden" name="signup" value="TRUE">
+  </p>
+  <p>
+    <button class="big_button btn_signup" type="button">SIGN UP<i class="fa fa-sign-in fa-2x"></i></button>
+  </p>
+  <p>&nbsp;</p>
+  <p>
+    <a href="http://map.forevent.com/login"><button class="big_button_left btn_login" type="button">LOG IN</button></a>
+	<a href="http://map.forevent.com/login/reset_password.php"><button class="big_button_right btn_reset" type="button">RESET PASSWORD</button></a>
+  </p>
+  <div id="submitted_container"></div>
+</div>
+</form>
